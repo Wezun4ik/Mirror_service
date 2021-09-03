@@ -16,6 +16,7 @@ std::ostream&		operator <<(std::ostream& stream, std::vector<char>& vec) {
 	return (stream);
 }
 
+//dig HTTP header for content length
 size_t				get_content_length(std::string str) {
 	static const boost::regex	reg_exp("Content-Length: (\\d+)");
 	boost::smatch results;
@@ -25,8 +26,8 @@ size_t				get_content_length(std::string str) {
 	return (std::stoi(results[1]));
 }
 
-//temporary empty
-std::vector<char>	read(tcp::socket& socket) {
+//reads message from client via socket
+std::vector<char>	socket_read(tcp::socket& socket) {
 	streambuf 					info_buf;
 	std::stringstream			stream;
 
@@ -40,8 +41,8 @@ std::vector<char>	read(tcp::socket& socket) {
 	return (std::vector<char>{0});
 }
 
-//temporary emptry
-void				send(tcp::socket& socket, std::vector<char>& message) {
+//sends message to client via socket
+void				socket_send(tcp::socket& socket, std::vector<char>& message) {
 	//write to socket; not to be confused with c-style write
 	write(socket, boost::asio::buffer(message));
 }
@@ -54,13 +55,12 @@ int					main() {
 
 	//accept incoming request
 	mirror_acceptor.accept(mirror_socket);
+
 	//read image from socket
-	auto image = read(mirror_socket);
-	//debug; delete later
-	cout << image << endl;
+	auto image = socket_read(mirror_socket);
+
 	//send mmirrored image back
-	send(mirror_socket, image);
-	//debug; delete later
-	cout << "it Works!" << endl;
+	socket_send(mirror_socket, image);
+
 	return (0);
 }
