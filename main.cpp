@@ -38,7 +38,11 @@ std::vector<char>	socket_read(tcp::socket& socket) {
 	auto len_of_image = get_content_length(stream.str());
 	//debug; delete later
 	cout << len_of_image << endl;
-	return (std::vector<char>{0});
+	streambuf					image_buf;
+	boost::asio::read(socket, image_buf, boost::asio::transfer_exactly(len_of_image));
+	std::vector<char>	ret(boost::asio::buffer_cast<const char*>(image_buf.data()),
+							boost::asio::buffer_cast<const char*>(image_buf.data()) + len_of_image);
+	return (ret);
 }
 
 //sends message to client via socket
