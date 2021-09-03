@@ -36,9 +36,8 @@ std::vector<char>	socket_read(tcp::socket& socket) {
 	stream << &info_buf;
 	//read how long is image in bytes
 	auto len_of_image = get_content_length(stream.str());
-	//debug; delete later
-	cout << len_of_image << endl;
 	streambuf					image_buf;
+	//read image into vector of chars
 	boost::asio::read(socket, image_buf, boost::asio::transfer_exactly(len_of_image));
 	std::vector<char>	ret(boost::asio::buffer_cast<const char*>(image_buf.data()),
 							boost::asio::buffer_cast<const char*>(image_buf.data()) + len_of_image);
@@ -52,19 +51,20 @@ void				socket_send(tcp::socket& socket, std::vector<char>& message) {
 }
 
 int					main() {
-	//setting up boost.asio
-	io_service			mirror_io_service;
-	tcp::acceptor		mirror_acceptor(mirror_io_service, tcp::endpoint(tcp::v4(), 5875));
-	tcp::socket			mirror_socket(mirror_io_service);
+	for (;;) {
+		//setting up boost.asio
+		io_service			mirror_io_service;
+		tcp::acceptor		mirror_acceptor(mirror_io_service, tcp::endpoint(tcp::v4(), 5875));
+		tcp::socket			mirror_socket(mirror_io_service);
 
-	//accept incoming request
-	mirror_acceptor.accept(mirror_socket);
+		//accept incoming request
+		mirror_acceptor.accept(mirror_socket);
 
-	//read image from socket
-	auto image = socket_read(mirror_socket);
+		//read image from socket
+		auto image = socket_read(mirror_socket);
 
-	//send mmirrored image back
-	socket_send(mirror_socket, image);
-
+		//send mmirrored image back
+		socket_send(mirror_socket, image);
+	}
 	return (0);
 }
