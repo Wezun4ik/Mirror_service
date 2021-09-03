@@ -16,19 +16,27 @@ std::ostream& operator <<(std::ostream& stream, std::vector<char>& vec) {
 }
 
 //temporary empty
-std::vector<char>	read(tcp::socket & socket) {
+std::vector<char>	read(tcp::socket& socket) {
+	streambuf 		info_buf;
+
+	//read http header
+	read_until(socket, info_buf, "\n");
+	//debug; delete later
+	cout << &info_buf << endl;
 	return (std::vector<char>{0});
 }
 
 //temporary emptry
-void send(tcp::socket & socket, std::vector<char> message) {
+void				send(tcp::socket& socket, std::vector<char>& message) {
+	//write to socket; not to be confused with c-style write
+	write(socket, boost::asio::buffer(message));
 }
 
 int main () {
 	//setting up boost.asio
 	io_service			mirror_io_service;
-	tcp::acceptor	mirror_acceptor(mirror_io_service, tcp::endpoint(tcp::v4(), 5875));
-	tcp::socket		mirror_socket(mirror_io_service);
+	tcp::acceptor		mirror_acceptor(mirror_io_service, tcp::endpoint(tcp::v4(), 5875));
+	tcp::socket			mirror_socket(mirror_io_service);
 
 	//accept incoming request
 	mirror_acceptor.accept(mirror_socket);
