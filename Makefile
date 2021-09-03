@@ -4,7 +4,7 @@ FLAGS = -Wall -Wextra -Werror
 
 FILES = main.cpp
 
-LIBS = -lboost_system
+LIBS = -lboost_system -lboost_regex
 
 all: $(NAME)
 
