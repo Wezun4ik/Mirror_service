@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+
+#Linux executable
+
+mirror
+
+#Intellisense folder
+
+/.history
