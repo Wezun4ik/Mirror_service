@@ -103,6 +103,10 @@ int						main() {
 			socket_send(mirror_socket, mirrored_image);
 		} catch (std::invalid_argument& e) {
 			std::cout << "Transmitted data is not valid: " << e.what() << std::endl;
+		} catch (boost::exception& e) {
+			std::cout << "Boost failed: " << dynamic_cast<std::exception const&>(e).what() << std::endl;
+		} catch (cv::Exception& e) {
+			std::cout << "CV failed: " << e.what() << std::endl;
 		}
 	}
 	return (0);
