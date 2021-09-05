@@ -4,7 +4,7 @@ FLAGS = -Wall -Wextra -Werror
 
 FILES = main.cpp
 
-LIBS = -lboost_system -lboost_regex $(shell pkg-config --libs opencv)
+LIBS = -lboost_system -lboost_regex $(shell pkg-config --libs opencv) -g
 
 all: $(NAME)
 
