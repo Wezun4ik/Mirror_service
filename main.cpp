@@ -105,6 +105,8 @@ int						main() {
 			std::cout << "Transmitted data is not valid: " << e.what() << std::endl;
 		} catch (boost::exception& e) {
 			std::cout << "Boost failed: " << dynamic_cast<std::exception const&>(e).what() << std::endl;
+			//boost exceptions are critical
+			break;
 		} catch (cv::Exception& e) {
 			std::cout << "CV failed: " << e.what() << std::endl;
 		}
